@@ -1,6 +1,6 @@
 ## 🐳 Dockerfile Explanation (Beginner Friendly)
 
-No problem! Let me explain your `Dockerfile` line by line in **simple beginner-friendly language**, like you're just learning.
+Let me explain your `Dockerfile` line by line in **simple beginner-friendly language**, like you're just learning.
 
 ---
 
