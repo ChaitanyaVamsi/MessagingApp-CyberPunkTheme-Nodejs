@@ -1,4 +1,5 @@
-const socket = io("http://localhost:3000");
+const socket = io();
+//This will auto-connect to the host that served the HTML file — ideal and flexible.
 
 const messageContainer = document.getElementById("message-container");
 const msgForm = document.getElementById("send-container");
