@@ -1,6 +1,6 @@
 ## 🐳 Dockerfile Explanation (Beginner Friendly)
 
-Let me explain your `Dockerfile` line by line in **simple beginner-friendly language**, like you're just learning.
+No problem! Let me explain your `Dockerfile` line by line in **simple beginner-friendly language**, like you're just learning.
 
 ---
 
@@ -69,6 +69,31 @@ It’s like giving someone a lunchbox with everything ready to go.
 
 ---
 
+## 📄 Full Dockerfile Used
+
+```Dockerfile
+# Use Node.js LTS base image
+FROM node:18
+
+# Set working directory
+WORKDIR /app
+
+# Copy dependency files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy all source files
+COPY . .
+
+# Expose the port your app runs on
+EXPOSE 3000
+
+# Start the server
+CMD ["npm", "run", "devStart"]
+```
+
 ## 🎉 In Simple Terms
 
 This file tells Docker:
@@ -81,4 +106,29 @@ docker build -t chat-app .
 docker run -p 3000:3000 chat-app
 ```
 
-Let me know if you'd like me to give you a drawing/diagram of how this works too!
+---
+
+## 📄 Full Dockerfile Used
+
+```Dockerfile
+# Use Node.js LTS base image
+FROM node:18
+
+# Set working directory
+WORKDIR /app
+
+# Copy dependency files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy all source files
+COPY . .
+
+# Expose the port your app runs on
+EXPOSE 3000
+
+# Start the server
+CMD ["npm", "run", "devStart"]
+```
