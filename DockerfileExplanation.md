@@ -8,6 +8,9 @@ FROM node:18
 ```
 🧠 **Explanation**:
 Uses a prebuilt Node.js 18 environment as a base image, so you don't have to install Node manually.
+This tells Docker:
+"Start with a ready-to-go Node.js environment" (version 18).
+It’s like saying, "Give me a laptop with Node.js pre-installed."
 
 ---
 
