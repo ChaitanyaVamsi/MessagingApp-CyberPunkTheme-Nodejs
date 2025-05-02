@@ -20,6 +20,11 @@ WORKDIR /app
 ```
 🧠 **Explanation**:
 Creates a working directory called `/app` inside the container. All remaining commands run from here.
+<br>This tells Docker:
+<br>Inside the Docker container, it creates a folder called /app.
+<br>All following commands will run inside that folder.
+<br>Like doing cd /app first.
+
 
 ---
 
@@ -29,6 +34,9 @@ COPY package*.json ./
 ```
 🧠 **Explanation**:
 Copies dependency files into the container. This helps Docker cache the install step, making future builds faster.
+<br>This tells Docker:
+<br>This copies your package.json and package-lock.json from your computer into the container.
+<br>These files list your app’s dependencies (like socket.io, express, etc.).
 
 ---
 
@@ -38,6 +46,9 @@ RUN npm install
 ```
 🧠 **Explanation**:
 Installs all the Node.js dependencies listed in your `package.json` inside the container.
+<br>This tells Docker:
+<br>Runs npm install inside the container to install all your Node.js packages.
+<br>These go into the container’s version of node_modules.
 
 ---
 
@@ -47,6 +58,9 @@ COPY . .
 ```
 🧠 **Explanation**:
 Copies the entire project into the container so the app code is available to run.
+<br>This tells Docker:
+<br>This copies everything else (your JS, HTML, CSS, etc.) into the container.
+<br>Like uploading your full project folder.
 
 ---
 
@@ -56,6 +70,9 @@ EXPOSE 3000
 ```
 🧠 **Explanation**:
 Lets Docker know the container will use port 3000, which you map to your local machine using `-p`.
+<br>This tells Docker:
+<br>Tells Docker: “Hey, this app will run on port 3000.”
+<br>So later you can map it to your computer’s port (via -p).
 
 ---
 
@@ -65,6 +82,9 @@ CMD ["npm", "run", "devStart"]
 ```
 🧠 **Explanation**:
 When the container starts, it runs your Node.js app using the `devStart` script from `package.json`.
+<br>This tells Docker:
+<br>This is the command that runs when the container starts.
+<br>In your case, npm run devStart runs your server.js with nodemon or node (depending on your script).
 
 ---
 
