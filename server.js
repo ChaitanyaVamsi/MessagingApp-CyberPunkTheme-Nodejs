@@ -1,12 +1,17 @@
 const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
-const io = require("socket.io")(http);
+const io = require("socket.io")(http, {
+  cors: {
+    origin: "*", // ✅ ALLOW external devices to connect
+    methods: ["GET", "POST"],
+  },
+});
 const path = require("path");
 
 const users = {};
 
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname))); // ✅ Serve index.html + script.js
 
 io.on("connection", (socket) => {
   socket.on("new-user", (name) => {
@@ -42,6 +47,6 @@ var jsCrypto = {
 };
 
 const PORT = 3000;
-http.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+http.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running at http://0.0.0.0:${PORT}`);
 });
