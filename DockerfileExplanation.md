@@ -58,6 +58,7 @@ COPY . .
 Copies the entire project into the container so the app code is available to run.  
 This tells Docker:  
 Copies everything else (your JS, HTML, CSS, etc.) into the container — like uploading your full project folder.
+Copies everything else (your JS, HTML, CSS, etc.) into the container. This happens after dependencies to keep Docker layer caching efficient.
 
 ---
 
