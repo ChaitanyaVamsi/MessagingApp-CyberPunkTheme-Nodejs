@@ -89,7 +89,7 @@ However, there’s a clever trick: **mount the Docker socket**.
 docker run --rm -d --name app1 \
   -v /var/run/docker.sock:/var/run/docker.sock \
   --network none \
-  kiran2361993/troubleshootingtools:v1
+  myImage
 ```
 
 * This gives the container access to the Docker daemon running on the host.
