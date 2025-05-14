@@ -1,0 +1,10 @@
+version: '3'
+services:
+  app:
+    image: node:18   # Use the Node.js 18 LTS image from Docker Hub
+    working_dir: /app
+    volumes:
+      - .:/app        # Mount the current directory to /app inside the container
+    ports:
+      - "3000:3000"   # Expose port 3000
+    command: npm run devStart   # Run the npm command to start the app
