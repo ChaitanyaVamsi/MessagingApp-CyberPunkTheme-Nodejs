@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker2   # your Dockerfile name
+    container_name: myapp_container
+    ports:
+      - "3000:3000"        # maps host port 3000 to container port 3000
