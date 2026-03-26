@@ -10,6 +10,7 @@ const io = require("socket.io")(http, {
 const path = require("path");
 
 ///
+const client = require("prom-client"); // ✅ ADD
 app.use(express.static(path.join(__dirname)));
 
 client.collectDefaultMetrics(); // ✅ ADD
