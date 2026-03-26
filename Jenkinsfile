@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'slave' }
+    agent any
 
      environment{
             COURSE = "Jenkins"
@@ -31,7 +31,7 @@ pipeline {
        stage('Build Image'){
               steps{
                 script{
-
+                   withAWS(region:'us-east-1',credentials:'aws-creds') {
                     sh """
                             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com
                             docker build -t ${PROJECT}/${COMPONENT}:${appVersion} .
@@ -39,7 +39,7 @@ pipeline {
                             docker images
                             docker push ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${appVersion}
                     """
-
+                   }
 
                 }
               }
@@ -47,7 +47,7 @@ pipeline {
         stage('Deploy'){
           steps{
             script{
-
+               withAWS(region:'us-east-1',credentials:'aws-creds') {
                 sh """
                 docker stop ${COMPONENT} || true
                 docker rm ${COMPONENT} || true
@@ -55,7 +55,7 @@ pipeline {
                 docker run -d --name ${COMPONENT} -p 3000:3000 \
                 ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${appVersion}
                 """
-
+               }
             }
           }
 }
