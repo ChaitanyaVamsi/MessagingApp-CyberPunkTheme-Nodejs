@@ -1,19 +1,26 @@
 pipeline {
     agent any
 
-    // environment {
-    //     APP_NAME = "chat-app"
-    //     DEPLOY_USER = "ubuntu"
-    //     DEPLOY_HOST = "10.0.2.10"       // replace with your private server IP
-    //     DEPLOY_PATH = "/var/www/${APP_NAME}"
-    // }
+     environment{
+            COURSE = "Jenkins"
+            appVersion = ""
+            ACC_ID = "471112667143"
+            PROJECT = "realtime-chat-app"
+            COMPONENT = "frontend"
+          }
+
 
     stages {
-        stage('Checkout') {
-            steps {
-                echo "hi"
+
+      stage ('Read Version'){
+                steps{
+                  script{
+                    def packageJSON = readJSON file: 'package.json'
+                    appVersion= packageJSON.version
+                    echo "app version: ${appVersion}"
+                  }
+                }
             }
-        }
 
         stage('Install Dependencies') {
             steps {
@@ -21,28 +28,37 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                sh 'npm test'
-            }
-        }
+       stage('Build Image'){
+              steps{
+                script{
+                  withAWS(region:'us-east-1',credentials:'aws-creds') {
+                    sh """
+                            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com
+                            docker build -t ${PROJECT}/${COMPONENT}:${appVersion} .
+                            docker tag ${PROJECT}/${COMPONENT}:${appVersion} ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${appVersion}
+                            docker images
+                            docker push ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${appVersion}
+                    """
+                    }
 
-        stage('Build') {
-            steps {
-                sh 'npm run build'
+                }
+              }
             }
-        }
+        stage('Deploy'){
+          steps{
+            script{
+              withAWS(region:'us-east-1',credentials:'aws-creds') {
+                sh """
+                docker stop ${COMPONENT} || true
+                docker rm ${COMPONENT} || true
 
-        // stage('Deploy') {
-        //     steps {
-        //         // Using SSH to deploy to a server
-        //         sh """
-        //             ssh ${DEPLOY_USER}@${DEPLOY_HOST} 'mkdir -p ${DEPLOY_PATH}'
-        //             rsync -avz --exclude node_modules ./ ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
-        //             ssh ${DEPLOY_USER}@${DEPLOY_HOST} 'cd ${DEPLOY_PATH} && npm install --production && pm2 restart ${APP_NAME} || pm2 start index.js --name ${APP_NAME}'
-        //         """
-        //     }
-        // }
+                docker run -d --name ${COMPONENT} -p 3000:3000 \
+                ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${appVersion}
+                """
+              }
+            }
+          }
+}
     }
 
     post {
