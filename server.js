@@ -9,6 +9,17 @@ const io = require("socket.io")(http, {
 });
 const path = require("path");
 
+///
+app.use(express.static(path.join(__dirname)));
+
+client.collectDefaultMetrics(); // ✅ ADD
+
+app.get("/metrics", async (req, res) => { // ✅ ADD
+  res.set("Content-Type", client.register.contentType);
+  res.end(await client.register.metrics());
+});
+
+///
 const users = {};
 
 app.use(express.static(path.join(__dirname))); // ✅ Serve index.html + script.js
