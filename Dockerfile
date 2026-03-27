@@ -1,20 +1,17 @@
-# Use Node.js LTS base image
-FROM node:18
-
-# Set working directory
+# ---------- Build Stage ----------
+FROM node:20.19.5-alpine3.22 AS build
 WORKDIR /app
-
-# Copy dependency files
-COPY package*.json ./
-
-# Install dependencies
+COPY package*.json .
 RUN npm install
-
-# Copy all source files
 COPY . .
 
-# Expose the port your app runs on
+# ---------- Runtime Stage ----------
+FROM node:20.19.5-alpine3.22
+WORKDIR /app
+RUN addgroup -S appgroup && \
+  adduser -S appuser -G appgroup && \
+  chown -R appuser:appgroup /app
+COPY --from=build /app .
+USER appuser
 EXPOSE 3000
-
-# Start the server
 CMD ["npm", "run", "devStart"]
