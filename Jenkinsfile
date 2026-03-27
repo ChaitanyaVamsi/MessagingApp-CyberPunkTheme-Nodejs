@@ -44,17 +44,14 @@ pipeline {
             steps {
                 script {
                     sh """
-                        # ✅ Export the version so compose can read it
                         export APP_VERSION=${appVersion}
                         export ACC_ID=${ACC_ID}
 
-                        # Pull latest images
+                        echo "Deploying version: ${APP_VERSION}"
+
                         docker compose pull
+                        docker compose up -d
 
-                        # Recreate only the frontend container, keep others running
-                        docker compose up -d --no-deps --force-recreate frontend
-
-                        # Verify
                         docker compose ps
                     """
                 }

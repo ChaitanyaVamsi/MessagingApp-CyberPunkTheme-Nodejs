@@ -34,6 +34,7 @@ services:
       - '--web.external-url=http://realtime-chat-app-dev-alb-18324781.us-east-1.elb.amazonaws.com/prometheus/'
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
     networks:
       - monitoring
 
@@ -46,5 +47,7 @@ services:
       - GF_SERVER_DOMAIN=realtime-chat-app-dev-alb-18324781.us-east-1.elb.amazonaws.com
     depends_on:
       - prometheus
+    volumes:
+    - grafana-data:/var/lib/grafana
     networks:
       - monitoring
