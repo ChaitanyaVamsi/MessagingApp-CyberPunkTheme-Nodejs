@@ -4,6 +4,10 @@ networks:
   monitoring:
     driver: bridge
 
+volumes:
+  prometheus-data:
+  grafana-data:
+
 services:
   nginx:
     image: nginx:latest
