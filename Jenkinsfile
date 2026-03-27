@@ -1,7 +1,3 @@
-# plugins
-  Pipeline Utility Steps
-  aws credential plugins
-  stage view
 pipeline {
     agent any
 
@@ -74,3 +70,8 @@ pipeline {
         }
     }
 }
+
+// # plugins
+//   Pipeline Utility Steps
+//   aws credential plugins
+//   stage view
