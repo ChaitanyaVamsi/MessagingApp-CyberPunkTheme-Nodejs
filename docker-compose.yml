@@ -35,7 +35,7 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.route-prefix=/'
-      - '--web.external-url=http://realtime-chat-app-dev-alb-18324781.us-east-1.elb.amazonaws.com/prometheus/'
+      - '--web.external-url=http://${ALB_DNS}/prometheus/' # this ALB_DNS we need to update comes from jenkin ci
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
@@ -46,9 +46,9 @@ services:
     image: grafana/grafana
     container_name: grafana
     environment:
-      - GF_SERVER_ROOT_URL=http://realtime-chat-app-dev-alb-18324781.us-east-1.elb.amazonaws.com/grafana/
+      - GF_SERVER_ROOT_URL=http://${ALB_DNS}/grafana/ # this ALB_DNS we need to update comes from jenkin ci
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
-      - GF_SERVER_DOMAIN=realtime-chat-app-dev-alb-18324781.us-east-1.elb.amazonaws.com
+      - GF_SERVER_DOMAIN=${ALB_DNS} # this ALB_DNS we need to update comes from jenkin ci
     depends_on:
       - prometheus
     volumes:

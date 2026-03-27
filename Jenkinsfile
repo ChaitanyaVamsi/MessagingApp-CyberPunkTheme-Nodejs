@@ -7,7 +7,9 @@ pipeline {
         ACC_ID = "471112667143"
         PROJECT = "realtime-chat-app"
         COMPONENT = "frontend"
+        ALB_DNS = "realtime-chat-app-dev-alb-18324781.us-east-1.elb.amazonaws.com"
     }
+
 
     stages {
 
@@ -57,6 +59,7 @@ pipeline {
                     sh """
                         export APP_VERSION=${appVersion}
                         export ACC_ID=${ACC_ID}
+                        export ALB_DNS=${ALB_DNS}
 
                         echo "Deploying version: ${appVersion}"
 
