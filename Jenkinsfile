@@ -47,7 +47,7 @@ pipeline {
                         export APP_VERSION=${appVersion}
                         export ACC_ID=${ACC_ID}
 
-                        echo "Deploying version: ${APP_VERSION}"
+                        echo "Deploying version: ${appVersion}"
 
                         docker compose pull
                         docker compose up -d
