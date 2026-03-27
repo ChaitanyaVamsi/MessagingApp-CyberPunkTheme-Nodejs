@@ -28,6 +28,10 @@ services:
   prometheus:
     image: prom/prometheus
     container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.external-url=http://your-alb-dns/prometheus/'
+      - '--web.route-prefix=/prometheus'
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
@@ -37,7 +41,7 @@ services:
     image: grafana/grafana
     container_name: grafana
     environment:
-      - GF_SERVER_ROOT_URL=http://localhost/grafana/
+      - GF_SERVER_ROOT_URL=http://realtime-chat-app-dev-alb-1970283858.us-east-1.elb.amazonaws.com/grafana/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
     depends_on:
       - prometheus
