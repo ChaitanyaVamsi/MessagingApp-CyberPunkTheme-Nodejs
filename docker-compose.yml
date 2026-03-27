@@ -41,7 +41,7 @@ services:
     image: grafana/grafana
     container_name: grafana
     environment:
-      - GF_SERVER_ROOT_URL=http://realtime-chat-app-dev-alb-1970283858.us-east-1.elb.amazonaws.com/grafana/
+      - GF_SERVER_ROOT_URL=realtime-chat-app-dev-alb-18324781.us-east-1.elb.amazonaws.com/grafana/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
     depends_on:
       - prometheus
