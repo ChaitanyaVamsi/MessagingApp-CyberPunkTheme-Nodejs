@@ -1,13 +1,27 @@
 version: '3.8'
+
 networks:
   monitoring:
     driver: bridge
+
 services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend
+      - grafana
+      - prometheus
+    networks:
+      - monitoring
+
   frontend:
     image: chatapp:latest
     container_name: frontend
-    ports:
-      - "3000:3000"
     networks:
       - monitoring
 
@@ -15,24 +29,20 @@ services:
     image: prom/prometheus
     container_name: prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--web.external-url=http://your-alb-dns/prometheus/'
-      - '--web.route-prefix=/prometheus'
+    - '--config.file=/etc/prometheus/prometheus.yml'
+    - '--web.route-prefix=/prometheus'
+    - '--web.external-url=/prometheus'
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
     networks:
       - monitoring
-
   grafana:
     image: grafana/grafana
     container_name: grafana
     environment:
-    - GF_SERVER_ROOT_URL=http://realtime-chat-app-dev-alb-1970283858.us-east-1.elb.amazonaws.com/grafana/
-    - GF_SERVER_SERVE_FROM_SUB_PATH=true
-    ports:
-      - "3001:3000"
+      - GF_SERVER_ROOT_URL=http://realtime-chat-app-dev-alb-18324781.us-east-1.elb.amazonaws.com/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_SERVER_DOMAIN=realtime-chat-app-dev-alb-18324781.us-east-1.elb.amazonaws.com
     depends_on:
       - prometheus
     networks:
