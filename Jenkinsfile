@@ -1,3 +1,7 @@
+# plugins
+  Pipeline Utility Steps
+  aws credential plugins
+  stage view
 pipeline {
     agent any
 
@@ -12,7 +16,7 @@ pipeline {
 
     stages {
 
-      stage ('Read Version'){
+      stage ('Extract App Version from package.json'){
                 steps{
                   script{
                     def packageJSON = readJSON file: 'package.json'
@@ -22,16 +26,16 @@ pipeline {
                 }
             }
 
-        stage('Install Dependencies') {
+        stage('Install Node Dependencies') {
             steps {
                 sh 'npm install'
             }
         }
 
-       stage('Build Image'){
+       stage('Build & Push Docker Image to AWS ECR'){
               steps{
                 script{
-                   withAWS(region:'us-east-1',credentials:'aws-creds') {
+
                     sh """
                             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com
                             docker build -t ${PROJECT}/${COMPONENT}:${appVersion} .
@@ -39,15 +43,15 @@ pipeline {
                             docker images
                             docker push ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${appVersion}
                     """
-                   }
+
 
                 }
               }
             }
-        stage('Deploy'){
+        stage('Deploy Docker Container on Agent Node'){
           steps{
             script{
-               withAWS(region:'us-east-1',credentials:'aws-creds') {
+
                 sh """
                 docker stop ${COMPONENT} || true
                 docker rm ${COMPONENT} || true
@@ -55,7 +59,7 @@ pipeline {
                 docker run -d --name ${COMPONENT} -p 3000:3000 \
                 ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${appVersion}
                 """
-               }
+
             }
           }
 }
