@@ -62,7 +62,7 @@ pipeline {
                         export ALB_DNS=${ALB_DNS}
 
                         echo "Deploying version: ${appVersion}"
-
+                        docker compose down
                         docker compose pull
                         docker compose up -d
 
