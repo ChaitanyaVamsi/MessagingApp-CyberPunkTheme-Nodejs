@@ -7,7 +7,7 @@ pipeline {
         ACC_ID = "471112667143"
         PROJECT = "realtime-chat-app"
         COMPONENT = "frontend"
-        ALB_DNS = "realtime-chat-app-dev-alb-1876053266.us-east-1.elb.amazonaws.com/"
+        ALB_DNS = "realtime-chat-app-dev-alb-1876053266.us-east-1.elb.amazonaws.com" // make sure format is like
     }
 
 
