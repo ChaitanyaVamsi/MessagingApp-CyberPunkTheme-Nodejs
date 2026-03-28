@@ -46,7 +46,7 @@ services:
     image: grafana/grafana
     container_name: grafana
     environment:
-      - GF_SERVER_ROOT_URL=http://${ALB_DNS}/grafana/ # this ALB_DNS we need to update comes from jenkin ci
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s/grafana
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
       - GF_SERVER_DOMAIN=${ALB_DNS} # this ALB_DNS we need to update comes from jenkin ci
     depends_on:
